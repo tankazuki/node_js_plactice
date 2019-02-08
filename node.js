@@ -36,12 +36,18 @@ function getFromClient(request, response){
       break;
    }
 }
+let data = {
+    'Taro': '000-111-222',
+    'kazuki': '000-111-333',
+    'yoshio': '000-111-444'
+};
 
 function response_index(request, response){
   let msg = "これはIndexページです";
   let content = ejs.render(index_page, {
     title: "Index",
     content: msg,
+      data: data
   });
   response.writeHead(200, {'Content-Type': 'text/html'});
   response.write(content);
