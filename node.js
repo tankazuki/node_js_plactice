@@ -8,12 +8,12 @@ const index_page = fs.readFileSync('./index.ejs', 'utf8');
 const style_css = fs.readFileSync('./style.css', 'utf8');
 const other_page = fs.readFileSync('./other.ejs', 'utf8');
 
-var server = http.createServer(getFromClient);
+let server = http.createServer(getFromClient);
 server.listen(3000);
 console.log('Server start');
 
 function getFromClient(request, response){
-     var url_parts = url.parse(request.url, true);
+     let url_parts = url.parse(request.url, true);
      switch (url_parts.pathname) {
 
      case '/':
@@ -38,8 +38,8 @@ function getFromClient(request, response){
 }
 
 function response_index(request, response){
-  var msg = "これはIndexページです"
-  var content = ejs.render(index_page, {
+  let msg = "これはIndexページです"
+  let content = ejs.render(index_page, {
     title: "Index",
     content: msg,
   })
@@ -49,18 +49,18 @@ function response_index(request, response){
 }
 
 function response_other(request, response){
-  var msg = "これはOtherページ。"
+  let msg = "これはOtherページ。"
   if (request.method == 'POST'){
 
-    var body = '';
+    let body = '';
     request.on('data', (data)=> {
       body +=data;
     });
 
     request.on('end', ()=>{
-      var post_data = qs.parse(body);
+      let post_data = qs.parse(body);
       msg += `あなたは、「${post_data.msg}」と書きました。`;
-      var content = ejs.render(other_page, {
+      let content = ejs.render(other_page, {
         title: "Other",
         content: msg
       });
@@ -69,8 +69,8 @@ function response_other(request, response){
       response.end();
     });
   } else {
-    var msg = 'ページが見つかりません。'
-    var content = ejs.render(other_page, {
+    let msg = 'ページが見つかりません。'
+    let content = ejs.render(other_page, {
       title: "Other",
       content: msg,
     });
