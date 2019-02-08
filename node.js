@@ -2,7 +2,7 @@ const http = require('http');
 const fs = require('fs');
 const ejs = require('ejs');
 const url = require('url');
-const qs = require('querystring')
+const qs = require('querystring');
 
 const index_page = fs.readFileSync('./index.ejs', 'utf8');
 const style_css = fs.readFileSync('./style.css', 'utf8');
@@ -38,18 +38,18 @@ function getFromClient(request, response){
 }
 
 function response_index(request, response){
-  let msg = "これはIndexページです"
+  let msg = "これはIndexページです";
   let content = ejs.render(index_page, {
     title: "Index",
     content: msg,
-  })
+  });
   response.writeHead(200, {'Content-Type': 'text/html'});
   response.write(content);
   response.end();
 }
 
 function response_other(request, response){
-  let msg = "これはOtherページ。"
+  let msg = "これはOtherページ。";
   if (request.method == 'POST'){
 
     let body = '';
@@ -69,7 +69,7 @@ function response_other(request, response){
       response.end();
     });
   } else {
-    let msg = 'ページが見つかりません。'
+    let msg = 'ページが見つかりません。';
     let content = ejs.render(other_page, {
       title: "Other",
       content: msg,
