@@ -12,7 +12,16 @@
   </head>
   <div role="main">
     <p><%= content %></p>
-    
+    <p>
+      <table>
+        <% for(let d in data) { %>
+          <tr>
+            <th><%= d %></th>
+            <td><%= data[d] %></td>
+          </tr>
+        <% } %>
+      </table>
+    </p>
   </div>
 </body>
 </html>
