@@ -15,10 +15,11 @@
     <p>
       <table>
         <% for(let d in data) { %>
-          <%- include('data_item', {d: d, let: [data[d]]}) %>
+          <%- include('data_item', {d: d, let: data[d]}) %>
         <% } %>
       </table>
     </p>
+    <a href="/other">otherへのリンク</a>
   </div>
 </body>
 </html>
