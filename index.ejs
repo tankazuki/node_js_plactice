@@ -13,15 +13,27 @@
   <div role="main">
     <p><%= content %></p>
     <p>
-      <table>
-        <% for(let d in data) { %>
-          <tr>
-            <th><%= d %></th>
-            <td><%= data[d] %></td>
-          </tr>
-        <% } %>
+      <table style="width: 400px;">
+      <tr>
+        <th>
+          伝言です！
+        </th>
+      </tr>
+      <tr>
+        <td>
+          <%= data.msg %>
+        </td>
+      </tr>
       </table>
     </p>
+    <p>your last message:<%= cookie_data %>
+    <p>
+      <form method="post" action="/">
+        Message <input type="text" name="msg">
+        <input type="submit" value="送信">
+      </form>
+    </p>
+    <a href="/other">otherへのリンク</a>
   </div>
 </body>
 </html>

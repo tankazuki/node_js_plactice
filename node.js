@@ -36,52 +36,71 @@ function getFromClient(request, response){
       break;
    }
 }
-let data = {
-    'Taro': '000-111-222',
-    'kazuki': '000-111-333',
-    'yoshio': '000-111-444'
-};
+
+let data = {msg: 'no message.....'};
 
 function response_index(request, response){
-  let msg = "これはIndexページです";
-  let content = ejs.render(index_page, {
-    title: "Index",
-    content: msg,
-      data: data
+  if (request.method == 'POST'){
+      let body = '';
+      request.on('data', (data)=> {
+         body += data;
+      });
+      request.on('end', () =>{
+          data = qs.parse(body);
+          setCookie('msg', data.msg, response);
+          write_index(request, response);
+      });
+  } else {
+      write_index(request, response);
+  }
+}
+
+var data2 = {
+    'Taro': ['taro@kkkkk', '000-111-222', 'Tokyo'],
+    'kazuki':['kazuki@kkkkk', '000-111-333', 'Yamagata'],
+    'yoshio':['yoshio@kkkkk', '000-111-444', 'USA']
+};
+
+function response_other(request, response){
+  let msg = "これはOtherページ。";
+  let content = ejs.render(other_page, {
+      title: "Other",
+      content: msg,
+      data: data2,
+      filename: 'data_item'
   });
   response.writeHead(200, {'Content-Type': 'text/html'});
   response.write(content);
   response.end();
 }
 
-function response_other(request, response){
-  let msg = "これはOtherページ。";
-  if (request.method == 'POST'){
-
-    let body = '';
-    request.on('data', (data)=> {
-      body +=data;
+function write_index(request, response){
+    let msg = "※伝言を表示します。";
+    let cookie_data = getCookie('msg', request);
+    let content = ejs.render(index_page, {
+        title: "Index",
+        content: msg,
+        data: data,
+        cookie_data: cookie_data
     });
-
-    request.on('end', ()=>{
-      let post_data = qs.parse(body);
-      msg += `あなたは、「${post_data.msg}」と書きました。`;
-      let content = ejs.render(other_page, {
-        title: "Other",
-        content: msg
-      });
-      response.writeHead(200, {'Content-Type': 'text/html'});
-      response.write(content);
-      response.end();
-    });
-  } else {
-    let msg = 'ページが見つかりません。';
-    let content = ejs.render(other_page, {
-      title: "Other",
-      content: msg,
-    });
-    response.writeHead(200, {'Content-Type': 'text/html'});
+    response.writeHead(200, {'content-Type': 'text/html'});
     response.write(content);
     response.end();
-  }
+}
+
+function setCookie(key, value, response) {
+    let cookie = escape(value);
+    response.setHeader('Set-Cookie', [key + '=' + cookie])
+}
+
+function getCookie(key, request){
+    let cookie_data = request.headers.cookie != undefined ? request.headers.cookie: '';
+    let data = cookie_data.split(';');
+    for (let i in data){
+        if (data[i].trim().startsWith(key + '=')){
+            let result = data[i].trim().substring(key.length + 1);
+            return unescape(result);
+        }
+    }
+    return '';
 }
