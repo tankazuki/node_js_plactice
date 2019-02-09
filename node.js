@@ -36,23 +36,22 @@ function getFromClient(request, response){
       break;
    }
 }
-let data = {
-    'Taro': '000-111-222',
-    'kazuki': '000-111-333',
-    'yoshio': '000-111-444'
-};
+
+let data = {msg: 'no message.....'};
 
 function response_index(request, response){
-  let msg = "これはIndexページです";
-  let content = ejs.render(index_page, {
-    title: "Index",
-    content: msg,
-      data: data,
-      filename: 'data_item'
-  });
-  response.writeHead(200, {'Content-Type': 'text/html'});
-  response.write(content);
-  response.end();
+  if (request.method == 'POST'){
+      let body = '';
+      request.on('data', (data)=> {
+         body += data;
+      });
+      request.on('end', () =>{
+          data = qs.parse(body);
+          write_index(request, response);
+      });
+  } else {
+      write_index(request, response);
+  }
 }
 
 var data2 = {
@@ -72,4 +71,16 @@ function response_other(request, response){
   response.writeHead(200, {'Content-Type': 'text/html'});
   response.write(content);
   response.end();
+}
+
+function write_index(request, response){
+    let msg = "※伝言を表示します。";
+    let content = ejs.render(index_page, {
+        title: "Index",
+        content: msg,
+        data: data
+    });
+    response.writeHead(200, {'content-Type': 'text/html'});
+    response.write(content);
+    response.end();
 }
