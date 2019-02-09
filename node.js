@@ -47,6 +47,7 @@ function response_index(request, response){
       });
       request.on('end', () =>{
           data = qs.parse(body);
+          setCookie('msg', data.msg, response);
           write_index(request, response);
       });
   } else {
@@ -75,12 +76,31 @@ function response_other(request, response){
 
 function write_index(request, response){
     let msg = "※伝言を表示します。";
+    let cookie_data = getCookie('msg', request);
     let content = ejs.render(index_page, {
         title: "Index",
         content: msg,
-        data: data
+        data: data,
+        cookie_data: cookie_data
     });
     response.writeHead(200, {'content-Type': 'text/html'});
     response.write(content);
     response.end();
+}
+
+function setCookie(key, value, response) {
+    let cookie = escape(value);
+    response.setHeader('Set-Cookie', [key + '=' + cookie])
+}
+
+function getCookie(key, request){
+    let cookie_data = request.headers.cookie != undefined ? request.headers.cookie: '';
+    let data = cookie_data.split(';');
+    for (let i in data){
+        if (data[i].trim().startsWith(key + '=')){
+            let result = data[i].trim().substring(key.length + 1);
+            return unescape(result);
+        }
+    }
+    return '';
 }
