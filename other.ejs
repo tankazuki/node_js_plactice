@@ -13,6 +13,13 @@
   <div class="main">
     <p><%= title %></p>
     <p><%= content %></p>
+      <p>
+        <table>
+          <% for(let d in data) {%>
+            <%- include('data_item', {d: d, let: data[d]}) %>
+          <% }%>
+        </table>
+      </p>
   </div>
 </body>
 </html>
