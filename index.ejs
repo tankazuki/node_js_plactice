@@ -13,11 +13,24 @@
   <div role="main">
     <p><%= content %></p>
     <p>
-      <table>
-        <% for(let d in data) { %>
-          <%- include('data_item', {d: d, let: data[d]}) %>
-        <% } %>
+      <table style="width: 400px;">
+      <tr>
+        <th>
+          伝言です！
+        </th>
+      </tr>
+      <tr>
+        <td>
+          <%= data.msg %>
+        </td>
+      </tr>
       </table>
+      <p>
+        <form method="post" action="/">
+          Message <input type="text" name="msg">
+          <input type="submit" value="送信">
+        </form>
+      </p>
     </p>
     <a href="/other">otherへのリンク</a>
   </div>
