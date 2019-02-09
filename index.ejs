@@ -15,10 +15,7 @@
     <p>
       <table>
         <% for(let d in data) { %>
-          <tr>
-            <th><%= d %></th>
-            <td><%= data[d] %></td>
-          </tr>
+          <%- include('data_item', {d: d, let: [data[d]]}) %>
         <% } %>
       </table>
     </p>
