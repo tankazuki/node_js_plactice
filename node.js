@@ -55,34 +55,21 @@ function response_index(request, response){
   response.end();
 }
 
+var data2 = {
+    'Taro': ['taro@kkkkk', '000-111-222', 'Tokyo'],
+    'kazuki':['kazuki@kkkkk', '000-111-333', 'Yamagata'],
+    'yoshio':['yoshio@kkkkk', '000-111-444', 'USA']
+};
+
 function response_other(request, response){
   let msg = "これはOtherページ。";
-  if (request.method == 'POST'){
-
-    let body = '';
-    request.on('data', (data)=> {
-      body +=data;
-    });
-
-    request.on('end', ()=>{
-      let post_data = qs.parse(body);
-      msg += `あなたは、「${post_data.msg}」と書きました。`;
-      let content = ejs.render(other_page, {
-        title: "Other",
-        content: msg
-      });
-      response.writeHead(200, {'Content-Type': 'text/html'});
-      response.write(content);
-      response.end();
-    });
-  } else {
-    let msg = 'ページが見つかりません。';
-    let content = ejs.render(other_page, {
+  let content = ejs.render(other_page, {
       title: "Other",
       content: msg,
-    });
-    response.writeHead(200, {'Content-Type': 'text/html'});
-    response.write(content);
-    response.end();
-  }
+      data: data2,
+      filename: 'data_item'
+  });
+  response.writeHead(200, {'Content-Type': 'text/html'});
+  response.write(content);
+  response.end();
 }
