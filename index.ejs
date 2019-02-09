@@ -25,12 +25,13 @@
         </td>
       </tr>
       </table>
-      <p>
-        <form method="post" action="/">
-          Message <input type="text" name="msg">
-          <input type="submit" value="送信">
-        </form>
-      </p>
+    </p>
+    <p>your last message:<%= cookie_data %>
+    <p>
+      <form method="post" action="/">
+        Message <input type="text" name="msg">
+        <input type="submit" value="送信">
+      </form>
     </p>
     <a href="/other">otherへのリンク</a>
   </div>
