@@ -1,4 +1,16 @@
 <tr>
-    <th><%= d %></th>
-    <td><%= let[0]%></td>
+   <table>
+       <tr>
+           <th>
+               <%= d %>
+           </th>
+       </tr>
+       <% for(let i in let) { %>
+           <tr>
+               <td>
+                   <%= let[i] %>
+               </td>
+           </tr>
+       <% } %>
+   </table>
 </tr>
