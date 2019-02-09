@@ -47,7 +47,8 @@ function response_index(request, response){
   let content = ejs.render(index_page, {
     title: "Index",
     content: msg,
-      data: data
+      data: data,
+      filename: 'data_item'
   });
   response.writeHead(200, {'Content-Type': 'text/html'});
   response.write(content);
