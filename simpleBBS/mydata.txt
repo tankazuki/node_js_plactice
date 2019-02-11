@@ -1,0 +1,5 @@
+{"id":"テスト","msg":"こんにちは"}
+{"id":"","msg":"あああ"}
+{"id":"","msg":"aa"}
+{"id":"","msg":"aa"}
+{"id":"[object HTMLInputElement]","msg":"aaa"}
