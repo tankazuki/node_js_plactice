@@ -6,10 +6,18 @@ router.get('/', (req, res, next) => {
     let mail = req.query.mail;
    let data = {
        title: 'Hello!',
-       content: `あなたの名前は「${name}」。
-                 メールアドレスは「${mail}」です。`
+       content: `※何か描いてください。`
    };
    res.render('hello', data);
+});
+
+router.post('/post', (req, res, next) => {
+    let msg = req.body['message'];
+    let data = {
+        title: 'Hello!',
+        content: msg
+    }
+    res.render('hello', data);
 });
 
 module.exports = router;
