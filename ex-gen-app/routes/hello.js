@@ -1,17 +1,29 @@
 let express = require('express');
 let router = express.Router();
+let mysql= require('mysql');
+
+let mysql_setting = {
+    host: 'localhost',
+    user: 'root',
+    password: '',
+    database: 'my-nodeapp-db'
+};
+
+
 
 router.get('/', (req, res, next) => {
-    let msg = `何か入力して送信してください。`;
+    let connection = mysql.createConnection(mysql_setting);
 
-    if (req.session.message != undefined){
-        msg = `Last message: ${req.session.message}`;
-    }
-   let data = {
-       title: 'Hello!',
-       content: `※何か描いてください。`
-   };
-   res.render('hello', data);
+    connection.connect();
+
+    connection.query('SELECT * FROM mydata',
+        function(error, results, fields){
+                if (error == null) {
+                    let data = {title:'mysql', content:results};
+                    res.render('hello', data)
+                }
+        });
+   connection.end();
 });
 
 router.post('/post', (req, res, next) => {
