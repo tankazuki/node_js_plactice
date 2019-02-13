@@ -6,17 +6,35 @@
             <%= title %>
         </title>
         <link rel="stylesheet" href="/stylesheet/style.css" />
+        <script src="https://code.jquery.com/jquery.min.js"></script>
+        <script>
+            $(document).ready(function(){
+               $('#btn').click(function(){
+                  let n = $('#num').val();
+                  $.getJSON(`/ajax?id=${n}`, function(json){
+                     let msg = `<table>
+                                <tr><th>名前</th>
+                                <td>${json.name}</td></tr>
+                                <tr><th>年齢</th>
+                                <td>${json.age}</td></tr>
+                                <tr><th>メール</th>
+                                <td>${json.mail}</td></tr>
+                                </table>`;
+                     $('#msg').html(msg);
+
+                  });
+               });
+            });
+        </script>
     </head>
     <body>
         <header>
             <h1><%= title %></h1>
         </header>
         <div role="main">
-            <p><%- content %></p>
-            <form method="post" action="/hello/post">
-                <input type="text" name="message">
-                <input type="submit" value="送信">
-            </form>
+            <p id="msg" ><%- content %></p>
+                <input type="text" name="num" id="num">
+                <input type="submit" id="btn" value="GET">
         </div>
     </body>
 </html>
