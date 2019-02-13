@@ -2,8 +2,11 @@ let express = require('express');
 let router = express.Router();
 
 router.get('/', (req, res, next) => {
-    let name = req.query.name;
-    let mail = req.query.mail;
+    let msg = `何か入力して送信してください。`;
+
+    if (req.session.message != undefined){
+        msg = `Last message: ${req.session.message}`;
+    }
    let data = {
        title: 'Hello!',
        content: `※何か描いてください。`
@@ -13,10 +16,11 @@ router.get('/', (req, res, next) => {
 
 router.post('/post', (req, res, next) => {
     let msg = req.body['message'];
+    req.session.message = msg;
     let data = {
         title: 'Hello!',
-        content: msg
-    }
+        content: `Last message: ${req.session.message}`
+    };
     res.render('hello', data);
 });
 
