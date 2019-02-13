@@ -20,7 +20,7 @@ router.get('/', (req, res, next) => {
         function(error, results, fields){
                 if (error == null) {
                     let data = {title:'mysql', content:results};
-                    res.render('hello', data)
+                    res.render('hello/index', data)
                 }
         });
    connection.end();
