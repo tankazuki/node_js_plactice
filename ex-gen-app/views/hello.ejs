@@ -32,9 +32,17 @@
             <h1><%= title %></h1>
         </header>
         <div role="main">
-            <p id="msg" ><%- content %></p>
-                <input type="text" name="num" id="num">
-                <input type="submit" id="btn" value="GET">
+            <table>
+                <% for(let i in content) { %>
+                    <tr>
+                        <% let obj= content[i] %>
+                        <th><%= obj.id %></th>
+                        <td><%= obj.name %></td>
+                        <td><%= obj.mail %></td>
+                        <td><%= obj.age %></td>
+                    </tr>
+                <% } %>
+            </table>
         </div>
     </body>
 </html>
