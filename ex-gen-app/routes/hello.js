@@ -81,4 +81,43 @@ router.get('/show', (req, res, next) => {
     connection.end();
 });
 
+router.get('/edit', (req, res, next) => {
+    let id = req.query.id;
+
+    let connection = mysql.createConnection(mysql_setting);
+
+    connection.connect();
+
+    connection.query('SELECT * FROM mydata WHERE id=?', id,
+        function(error, results, fields){
+            if (error == null){
+                let data = {
+                    title: 'Hello/edit',
+                    content: `id = ${id}のレコード`,
+                    mydata: results[0]
+                };
+                res.render('hello/edit', data);
+            }
+        });
+    connection.end();
+});
+
+router.post('/edit', (req, res, next) => {
+   let id = req.body.id;
+   let nm = req.body.name;
+   let ml = req.body.mail;
+   let ag = req.body.age;
+   let data = {name: nm, mail: ml, age: ag};
+
+   let connection = mysql.createConnection(mysql_setting);
+
+   connection.connect();
+
+   connection.query('UPDATE mydata SET ? WHERE id = ? ', [data, id],
+       function(error, results, fields){
+       res.redirect('/hello');
+       });
+    connection.end();
+});
+
 module.exports = router;
