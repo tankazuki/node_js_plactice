@@ -36,4 +36,28 @@ router.post('/post', (req, res, next) => {
     res.render('hello', data);
 });
 
+router.get('/add', (req, res, next) => {
+    let data = {
+        title: 'Hello/Add',
+        content: '※新しいレコードを入力'
+    };
+    res.render('hello/add', data);
+});
+
+router.post('/add', (req, res, next) => {
+    let nm = req.body.name;
+    let ml = req.body.mail;
+    let ag = req.body.age;
+    let data = {name: nm, mail: ml, age: ag};
+
+    let connection = mysql.createConnection(mysql_setting);
+
+    connection.connect();
+
+    connection.query('INSERT INTO mydata set ?', data, function(error, results, fields){
+       res.redirect('/hello');
+    });
+    connection.end();
+});
+
 module.exports = router;
