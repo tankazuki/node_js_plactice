@@ -120,4 +120,40 @@ router.post('/edit', (req, res, next) => {
     connection.end();
 });
 
+router.get('/delete', (req, res, next) => {
+    let id = req.query.id;
+
+    let connection = mysql.createConnection(mysql_setting);
+
+    connection.connect();
+
+    connection.query('SELECT * FROM mydata WHERE id=?', id,
+        function(error, results, fields){
+            if (error == null){
+                let data = {
+                    title: 'Hello/delete',
+                    content: `id = ${id}のレコード`,
+                    mydata: results[0]
+                };
+                res.render('hello/delete', data);
+            }
+        });
+    connection.end();
+});
+
+router.post('/delete', (req, res, next) => {
+   let id = req.body.id;
+
+   let connection = mysql.createConnection(mysql_setting);
+
+   connection.connect();
+
+   connection.query('DELETE FROM mydata WHERE id=?', id,
+       function(error, results, fields){
+       res.redirect('/hello');
+       });
+
+    connection.end();
+});
+
 module.exports = router;
