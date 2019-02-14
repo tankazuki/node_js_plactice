@@ -37,27 +37,51 @@ router.post('/post', (req, res, next) => {
 });
 
 router.get('/add', (req, res, next) => {
+
     let data = {
         title: 'Hello/Add',
-        content: '※新しいレコードを入力'
+        content: '※新しいレコードを入力',
+        form: {name: "", mail: "", age: 0}
     };
     res.render('hello/add', data);
 });
 
 router.post('/add', (req, res, next) => {
-    let nm = req.body.name;
-    let ml = req.body.mail;
-    let ag = req.body.age;
-    let data = {name: nm, mail: ml, age: ag};
+    req.check('name', 'NAMEは必ず入力してください').notEmpty();
+    req.check('mail', 'MAILはメールアドレスを入力してください').isEmail();
+    req.check('age', 'AGEは年齢(整数)を入力してください').isInt();
 
-    let connection = mysql.createConnection(mysql_setting);
+    req.getValidationResult().then((result)=> {
+        if(!result.isEmpty()){
+            let re = '<ul class="error">';
+            let result_attr = result.array();
+            for(let n in result_attr){
+                re += '<li>' + result_attr[n].msg + '</li>';
+            }
+            re += '</ul>';
 
-    connection.connect();
+            let data = {
+                title: 'Hello/Add',
+                content: re,
+                form: req.body
+            };
+            res.render('hello/add', data);
+        } else{
+            let nm = req.body.name;
+            let ml = req.body.mail;
+            let ag = req.body.age;
+            let data = {name: nm, mail: ml, age: ag};
 
-    connection.query('INSERT INTO mydata set ?', data, function(error, results, fields){
-       res.redirect('/hello');
+            let connection = mysql.createConnection(mysql_setting);
+            connection.connect();
+            connection.query('INSERT INTO mydata SET ?', data,
+                function(error, results, fields){
+                res.redirect('/hello');
+                });
+            connection.end();
+        }
+
     });
-    connection.end();
 });
 
 router.get('/show', (req, res, next) => {
