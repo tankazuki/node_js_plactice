@@ -35,7 +35,7 @@
             <table>
                 <% for(let i in content) { %>
                     <tr>
-                        <% let obj= content[i] %>
+                        <% let obj= content[i].attributes; %>
                         <th><%= obj.id %></th>
                         <td><%= obj.name %></td>
                         <td><%= obj.mail %></td>

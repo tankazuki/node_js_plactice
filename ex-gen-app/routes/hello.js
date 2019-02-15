@@ -1,6 +1,22 @@
 let express = require('express');
 let router = express.Router();
 let mysql= require('mysql');
+let knex = require('knex')({
+   client: 'mysql',
+   connection: {
+       host: 'localhost',
+       user: 'root',
+       password: '',
+       database: 'my-nodeapp-db',
+       charset: 'utf8'
+   }
+});
+
+let Bookshelf = require('bookshelf')(knex);
+
+let MyData = Bookshelf.Model.extend({
+   tableName: 'mydata'
+});
 
 let mysql_setting = {
     host: 'localhost',
@@ -9,21 +25,19 @@ let mysql_setting = {
     database: 'my-nodeapp-db'
 };
 
-
-
 router.get('/', (req, res, next) => {
-    let connection = mysql.createConnection(mysql_setting);
-
-    connection.connect();
-
-    connection.query('SELECT * FROM mydata',
-        function(error, results, fields){
-                if (error == null) {
-                    let data = {title:'mysql', content:results};
-                    res.render('hello/index', data)
-                }
-        });
-   connection.end();
+    new MyData().fetchAll().then((collection) => {
+     let data = {
+         title: 'Hello',
+         content: collection.toArray()
+     };
+     res.render('hello/index', data);
+    })
+    .catch((err) =>{
+        res.status(500).json({error: true, data: {
+            message: err.message
+            }});
+    });
 });
 
 router.post('/post', (req, res, next) => {
