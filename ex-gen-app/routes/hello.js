@@ -61,41 +61,10 @@ router.get('/add', (req, res, next) => {
 });
 
 router.post('/add', (req, res, next) => {
-    req.check('name', 'NAMEは必ず入力してください').notEmpty();
-    req.check('mail', 'MAILはメールアドレスを入力してください').isEmail();
-    req.check('age', 'AGEは年齢(整数)を入力してください').isInt();
-
-    req.getValidationResult().then((result)=> {
-        if(!result.isEmpty()){
-            let re = '<ul class="error">';
-            let result_attr = result.array();
-            for(let n in result_attr){
-                re += '<li>' + result_attr[n].msg + '</li>';
-            }
-            re += '</ul>';
-
-            let data = {
-                title: 'Hello/Add',
-                content: re,
-                form: req.body
-            };
-            res.render('hello/add', data);
-        } else{
-            let nm = req.body.name;
-            let ml = req.body.mail;
-            let ag = req.body.age;
-            let data = {name: nm, mail: ml, age: ag};
-
-            let connection = mysql.createConnection(mysql_setting);
-            connection.connect();
-            connection.query('INSERT INTO mydata SET ?', data,
-                function(error, results, fields){
-                res.redirect('/hello');
-                });
-            connection.end();
-        }
-
-    });
+    let response = res;
+    new MyData(req.body).save().then((model)=>{
+        response.redirect('/hello');
+    })
 });
 
 router.get('/show', (req, res, next) => {
@@ -194,4 +163,25 @@ router.post('/delete', (req, res, next) => {
     connection.end();
 });
 
+router.get('/find', (req, res, next) => {
+   let data = {
+       title: '/Hello/Find',
+       content: '検索IDを入力',
+       form: {fstr: ''},
+       mydata: null
+   };
+   res.render('hello/find', data)
+});
+
+router.post('/find', (req, res, next) => {
+    new MyData().where('id', '=', req.body.fstr).fetch().then((collection) =>{
+        let data = {
+            title: 'Hello',
+            content: `id = ${req.body.fstr}の検索結果`,
+            form: req.body,
+            mydata: collection
+        };
+        res.render('hello/find', data);
+    })
+});
 module.exports = router;
