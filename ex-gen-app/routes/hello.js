@@ -184,4 +184,21 @@ router.post('/find', (req, res, next) => {
         res.render('hello/find', data);
     })
 });
+
+Bookshelf.plugin('pagination');
+
+router.get('/:page', (req, res, next) => {
+   let pg = req.params.page;
+   pg *= 1;
+   if (pg < 1){pg = 1; }
+   new MyData().fetchPage({page:pg, pageSize:3}).then((collection) => {
+       let data = {
+           title: 'Hello',
+           content: collection.toArray(),
+           pagination: collection.pagination
+       };
+       console.log(collection.pagination);
+       res.render('hello/index', data);
+   })
+});
 module.exports = router;
