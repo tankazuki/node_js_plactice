@@ -1,0 +1,15 @@
+<% if (let != null ) { %>
+    <tr>
+        <th style="width: 100px" >
+            <a class="home" href="/home/<%= let.attributes.user_id %>/1">
+            <%= let.relations.user.attributes.name %>
+            </a></th>
+            <td><%= let.attributes.message %></td>
+            <%
+                let d = new Date(let.attribute.created_at);
+                let dstr = `${d.getFullYear()}-${d.getMonth() + 1}-${d.getData()} ${d.getHours()}: ${d.getMinutes()}: ${d.getSeconds()}; `
+            %>
+            <td style="width:150px;"><%= dstr %></td>
+        </th>
+    </tr>
+<% } %>
