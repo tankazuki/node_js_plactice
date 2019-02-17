@@ -5,7 +5,7 @@ var router = express.Router();
 let mysql = require('mysql');
 
 let knex = require('knex')({
-  dialect: 'mysql',
+  client: 'mysql',
   connection: {
     host: 'localhost',
     user: 'root',
